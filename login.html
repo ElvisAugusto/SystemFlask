@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Metadados do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Login</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="login-container">
+    <!-- Cabeçalho -->
+    <header>
+        <!-- Logo -->
+        <img src="{{ url_for('static', filename='piba.png') }}" alt="logo" class="logo">
+        <!-- Título -->
+        <h2>Login</h2>
+    </header>
+    <!-- Conteúdo principal -->
+    <main>
+        <!-- Formulário de login -->
+        <form action="/login" method="post">
+            <!-- Token CSRF para segurança -->
+            {{ form.csrf_token }}
+            <!-- Campo de entrada de e-mail -->
+            <div class="user-box">
+                {{ form.email.label }}</br>
+                {{ form.email }}
+            </div>
+            <!-- Campo de entrada de senha -->
+            <div class="user-box">
+                {{ form.senha.label }}</br>
+                {{ form.senha }}
+            </div>
+            <!-- Botão de login -->
+            <button class="botao" type="submit">Entrar</button>
+        </form>
+    </main>
+    <!-- Rodapé -->
+    <footer>
+        <!-- Link para página de cadastro -->
+        <p>Não tem uma conta? <a href="{{ url_for('cadastrar') }}">Cadastre-se</a></p>
+        <!-- Exibição de mensagens de erro -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error-message">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </footer>
+</div>
+</body>
+</html>

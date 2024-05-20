@@ -1,0 +1,135 @@
+/* Estilos para resetar padrões e configurar a fonte */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+/* Estilos para o corpo da página */
+body {
+  background: #001399; /* Cor de fundo */
+  background-size: cover; /* Cobrir toda a área do corpo */
+  color: #fff; /* Cor do texto */
+  display: flex; /* Alinhar conteúdo ao centro verticalmente e horizontalmente */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Estilos para o container principal */
+.login-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px; /* Largura máxima do container */
+  padding: 3%;
+  box-sizing: border-box; /* Box-sizing para incluir padding na largura total */
+  box-shadow: 0 15px 25px rgba(0, 0, 0, .6); /* Sombra */
+  border-radius: 20px; /* Bordas arredondadas */
+  background-color: rgba(0, 0, 0, 0.75); /* Background semitransparente para contraste */
+}
+
+/* Estilos para o cabeçalho */
+header {
+  text-align: center;
+  margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+/* Estilos para o logotipo */
+.logo {
+  display: block;
+  margin: 0 auto 20px; /* Centralizar e adicionar espaço inferior */
+  width: 150px; /* Largura do logotipo */
+  height: auto; /* Altura automática */
+}
+
+/* Estilos para os títulos */
+h2 {
+  margin: 0 0 30px; /* Espaçamento inferior */
+  padding: 0;
+}
+
+/* Estilos para os campos de entrada */
+.user-box {
+  position: relative;
+  margin-bottom: 30px; /* Espaçamento inferior */
+}
+
+.user-box input {
+  width: 100%;
+  padding: 10px 0;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: none;
+  border-bottom: 1px solid #fff; /* Linha inferior */
+  outline: none;
+  background: transparent;
+  color: #fff;
+}
+
+.user-box label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 16px;
+  color: #fff;
+  transition: transform 0.3s, font-size 0.3s;
+}
+
+.user-box input:focus ~ label,
+.user-box input:valid ~ label {
+  transform: translateY(-150%);
+  font-size: 12px;
+  color: #03e9f4;
+}
+
+/* Estilos para os links */
+form a {
+  color: #f0ff04;
+  text-decoration: none;
+}
+
+form a:hover {
+  color: #fff;
+  border-radius: 5px;
+}
+
+/* Estilos para os botões */
+.botao {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  width: 100%; /* Largura total */
+  font-size: 16px;
+}
+
+.botao:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+/* Estilos para mensagens de erro */
+.error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .login-container {
+    width: 90%; /* Largura reduzida para telas menores */
+    padding: 10px; /* Maior espaçamento interno */
+  }
+
+  .logo {
+    width: 100px; /* Redução do tamanho do logotipo */
+  }
+
+  .botao {
+    padding: 10px; /* Maior preenchimento */
+    font-size: 14px; /* Redução do tamanho da fonte */
+  }
+}

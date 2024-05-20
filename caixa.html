@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Metadados do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caixa</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Container principal -->
+    <div class="login-container">
+        <!-- Cabeçalho -->
+        <header>
+            <!-- Logo -->
+            <img src="{{ url_for('static', filename='piba.png') }}" alt="logo" class="logo">
+            <!-- Título -->
+            <h2>Caixa</h2>
+        </header>
+        <!-- Conteúdo principal -->
+        <main>
+            <!-- Formulário para operações de caixa -->
+            <form action="{{ url_for('caixa') }}" method="post" id="buscarForm">
+                <!-- Token CSRF para segurança -->
+                {{ form.csrf_token }}
+                <div class="user-box">
+                    <!-- Instrução -->
+                    <p>Digite o valor da refeição:</p>
+                    <!-- Campo para entrada do ID da refeição -->
+                    {{ form.id_refeicao(id="id_refeicao", value="0", type="text") }}
+                    <!-- Botão para buscar o ID -->
+                    <button class="botao" type="submit" name="buscar_id">Buscar ID</button>
+                    <br>
+                    <!-- Exibição de mensagens flash -->
+                    <div>
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                <!-- Exibe a primeira mensagem flash -->
+                                <p class="flash-message">{{ messages[0] }}</p>
+                            {% endif %}
+                        {% endwith %}
+                        <!-- Campo para seleção da forma de pagamento -->
+                        <p>Forma de pagamento: {{ form.forma_pagamento(class="form-control") }}</p>
+                    </div>
+                    <!-- Grupo de botões de ação -->
+                    <div class="button-group">
+                        <button class="botao" type="submit" name="realizar_pagamento">Realizar Pagamento</button>
+                        <button class="botao" type="submit" name="cancelar">Cancelar</button>
+                        <button class="botao" type="submit" name="voltar_menu">Voltar menu</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+    <!-- Biblioteca Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <!-- Script JavaScript para controle do campo de ID da refeição -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obtém o elemento de entrada do ID da refeição
+            var idRefeicaoInput = document.getElementById('id_refeicao');
+
+            // Evita entrada de caracteres não numéricos
+            idRefeicaoInput.addEventListener('input', function(event) {
+                idRefeicaoInput.value = idRefeicaoInput.value.replace(/\D/g, '');
+            });
+
+            // Substitui "0" no foco inicial
+            idRefeicaoInput.addEventListener('focus', function() {
+                if (idRefeicaoInput.value === '0') {
+                    idRefeicaoInput.value = '';
+                }
+            });
+
+            // Restaura "0" se vazio ao perder o foco
+            idRefeicaoInput.addEventListener('blur', function() {
+                if (idRefeicaoInput.value === '') {
+                    idRefeicaoInput.value = '0';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

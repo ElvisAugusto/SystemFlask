@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Configurações do documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balança</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Conteúdo principal -->
+    <div class="login-container">
+        <header>
+            <!-- Logo -->
+            <img src="{{ url_for('static', filename='piba.png') }}" alt="logo" class="logo">
+            <!-- Título -->
+            <h2>Balança</h2>
+        </header>
+        <main>
+            <!-- Formulário -->
+            <form action="{{ url_for('add_value') }}" method="post" id="valorForm">
+                <!-- Campo de entrada -->
+                {{ form.csrf_token }}
+                <div class="user-box">
+                    {{form.valor.label}}<br>
+                    <!-- Campo de valor -->
+                    {{ form.valor(id="valor", value="0,00", type="text") }}<br>
+                     <!-- Exibição das refeições -->
+                    {% if refeicao %}
+                        <p>Refeições:</p>
+                        <ol>
+                            {% for item in refeicao %}
+                                <li>{{ item }}</li>
+                            {% endfor %}
+                        </ol>
+                    {% endif %}
+                    <!-- Exibição do total -->
+                    {% if valor %}
+                        <p>Total: {{ valor }}</p>
+                    {% endif %}
+                    <!-- Exibição de mensagens flash -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for message in messages %}
+                                    {{ message }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}</br>
+                    <!-- Botões -->
+                    <div class="button-group">
+                        <button class="botao" type="submit" name="adicionar">Adicionar</button>
+                        <button class="botao" type="submit" name="confirmar">Confirmar</button>
+                        <button class="botao" type="submit" name="limpar" id="limparBtn">Limpar</button>
+                        <button class="botao" type="submit" name="voltar_menu">Voltar menu</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Script JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Obter elementos do DOM
+            var valorInput = document.getElementById('valor');
+            var limparBtn = document.getElementById('limparBtn');
+
+            // Evento de entrada para o campo de valor
+            valorInput.addEventListener('input', function(event) {
+                var input = valorInput.value.replace(/\D/g, '');
+                var formattedInput = '';
+
+                // Remover zeros à esquerda
+                input = input.replace(/^0+/, '');
+
+                // Formatar valor
+                if (input.length > 2) {
+                    formattedInput = input.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + input.slice(-2);
+                } else if (input.length > 1) {
+                    formattedInput = '0,' + input;
+                } else if (input.length === 1) {
+                    formattedInput = '0,0' + input;
+                } else {
+                    formattedInput = '';
+                }
+
+                // Definir valor formatado no campo de entrada
+                valorInput.value = formattedInput;
+            });
+
+            // Evento de envio do formulário
+            document.getElementById('valorForm').addEventListener('submit', function(event) {
+                var valor = valorInput.value.replace(/\./g, '').replace(',', '.');
+                if (isNaN(valor) || valor.trim() === '') {
+                    // Alerta se o valor não for válido
+                    alert('Por favor, insira um valor numérico.');
+                    event.preventDefault();
+                } else {
+                    // Converter e fixar o valor para 2 casas decimais
+                    valorInput.value = parseFloat(valor).toFixed(2);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

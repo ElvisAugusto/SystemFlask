@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório</title>
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="login-container">
+        <!-- Cabeçalho -->
+        <header>
+            <!-- Logo -->
+            <img src="{{ url_for('static', filename='piba.png') }}" alt="logo" class="logo">
+            <!-- Título -->
+            <h2>Relatório</h2>
+        </header>
+        <!-- Conteúdo principal -->
+        <main>
+            <!-- Formulário para gerar relatório -->
+            <form action="{{ url_for('relatorio') }}" method="post">
+                <!-- Token CSRF para segurança -->
+                {{ form.csrf_token }}
+                <div class="user-box">
+                    <!-- Campo Data Inicial -->
+                    {{ form.data_inicial.label }}</br>
+                    <!-- Input para seleção de data e hora -->
+                    {{ form.data_inicial(type="datetime-local", value=form.data_inicial.data.strftime('%Y-%m-%dT%H:%M'), id="data_inicial") }}
+                    <!-- Exibição de erros -->
+                    {% if form.data_inicial.errors %}
+                        {% for error in form.data_inicial.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                <div>
+                <div class="user-box">
+                    <!-- Campo Data Final -->
+                    {{ form.data_final.label }}</br>
+                    <!-- Input para seleção de data e hora -->
+                    {{ form.data_final(type="datetime-local", value=form.data_final.data.strftime('%Y-%m-%dT%H:%M'), id="data_final") }}
+                    <!-- Exibição de erros -->
+                    {% if form.data_final.errors %}
+                        {% for error in form.data_final.errors %}
+                            <span class="error">{{ error }}</span>
+                        {% endfor %}
+                    {% endif %}
+                    <!-- Botões de ação -->
+                    <div class="button-group">
+                        <button class="botao" type="submit" name="gerar_relatorio">Gerar Relatório</button>
+                        <button class="botao" type="submit" name="voltar_menu">Voltar Menu</button>
+                    </div>
+                </div>
+            </form>
+        </main>
+        <!-- Rodapé -->
+        <footer>
+            <!-- Mensagens flash -->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for message in messages %}
+                            <p>{{ message }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <!-- Exibição de dados do relatório, se disponível -->
+            {% if total_refeicoes is defined %}
+                <div class="flash-messages">
+                    <p>Total de refeições vendidas: {{ total_refeicoes }}</p>
+                    <p>Valor total das refeições: {{ total_valor_refeicoes }}</p>
+                    <p>Quantidade de pagadores: {{ total_campos_preenchidos }}</p>
+                    <p>Quantidade de não pagadores: {{ total_campos_naopreenchidos }}</p>
+                    <p>IDs que não pagaram: {{ ids_nao_pagos }}</p>
+                </div>
+            {% endif %}
+        </footer>
+    </div>
+    <!-- Script JavaScript para controle de datas -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var dataInicialInput = document.getElementById('data_inicial');
+            var dataFinalInput = document.getElementById('data_final');
+
+            dataInicialInput.addEventListener('change', function() {
+                // Garante que a data final seja posterior à data inicial
+                if (dataFinalInput.value && dataFinalInput.value < dataInicialInput.value) {
+                    dataFinalInput.value = dataInicialInput.value;
+                }
+                // Define a data mínima para a data final como a data inicial
+                dataFinalInput.min = dataInicialInput.value;
+            });
+
+            dataFinalInput.addEventListener('change', function() {
+                // Garante que a data final seja posterior à data inicial
+                if (dataFinalInput.value < dataInicialInput.value) {
+                    dataFinalInput.value = dataInicialInput.value;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
